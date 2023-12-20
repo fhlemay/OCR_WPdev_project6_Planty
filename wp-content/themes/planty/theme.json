@@ -104,8 +104,13 @@
 				}
 			},
 			"link": {
+        ":hover": {
+          "typography": {
+            "textDecoration": "underline"
+          }
+        },
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--syne)"
+					"textDecoration": "none"
 				}
 			}
 		},
