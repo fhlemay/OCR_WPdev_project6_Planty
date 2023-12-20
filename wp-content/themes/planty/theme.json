@@ -192,6 +192,26 @@
           "fontFamily": "var(--wp--preset--font-family--syne)"
         }
       },
+      "h1": {
+        "typography": {
+          "fontSize": "38px",
+          "fontWeight": "800",
+          "lineHeight": "50px"
+        },
+        "color": {
+          "text": "var(--wp--preset--color--main)"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontSize": "38px",
+          "fontWeight": "800",
+          "lineHeight": "50px"
+        },
+        "color": {
+          "text": "var(--wp--preset--color--second)"
+        }
+      },
       "caption": {
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--syne)"
