@@ -74,6 +74,21 @@
 				}
 			},
 			"core/navigation": {
+				"elements": {
+					"link": {
+						":hover": {
+							"typography": {
+							  "fontSize": "13px",	
+                "fontWeight": "700",
+                "textDecoration": "none"
+							}
+						},
+						"typography": {
+              "fontSize": "16px",
+							"textDecoration": "none"
+						}
+					}
+				},
 				"typography": {
 					"fontFamily": "var(--wp--preset--font-family--syne)",
 					"fontSize": "16px",
