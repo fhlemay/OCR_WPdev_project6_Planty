@@ -183,25 +183,26 @@
     },
     "elements": {
       "h1": {
-        "color": {
-          "text": "var:preset|color|primary"
-        },
         "typography": {
           "fontSize": "38px",
           "fontWeight": "800",
-          "lineHeight": "50px",
+          "lineHeight": "46px",
           "textTransform": "uppercase"
         }
       },
       "h2": {
-        "color": {
-          "text": "var:preset|color|primary"
-        },
         "typography": {
-          "fontSize": "38px",
+          "fontSize": "30px",
           "fontWeight": "800",
-          "lineHeight": "50px",
+          "lineHeight": "36px",
           "textTransform": "uppercase"
+        }
+      },
+      "h3": {
+        "typography": {
+          "fontSize": "30px",
+          "fontWeight": "700",
+          "lineHeight": "36px"
         }
       },
       "link": {
