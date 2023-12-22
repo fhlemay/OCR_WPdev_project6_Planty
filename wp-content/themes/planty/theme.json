@@ -11,13 +11,13 @@
         },
         {
           "color": "#3b8e46",
-          "name": "Main",
-          "slug": "main"
+          "name": "primary",
+          "slug": "primary"
         },
         {
           "color": "#d2776a",
-          "name": "Second",
-          "slug": "second"
+          "name": "secondary",
+          "slug": "secondary"
         },
         {
           "color": "#dc9f96",
@@ -26,7 +26,7 @@
         },
         {
           "color": "#e0b9b4",
-          "name": "Call to action two",
+          "name": "Call to action 2",
           "slug": "ctatwo"
         },
         {
@@ -173,15 +173,6 @@
       },
       "core/navigation-link": {},
       "core/paragraph": {
-        "color": {
-          "text": "var(--wp--preset--color--black)"
-        },
-        "spacing": {
-          "padding": {
-            "bottom": "21px",
-            "top": "20px"
-          }
-        },
         "typography": {
           "fontSize": "16px",
           "fontStyle": "normal",
@@ -193,7 +184,7 @@
     "elements": {
       "h1": {
         "color": {
-          "text": "var(--wp--preset--color--main)"
+          "text": "var(--wp--preset--color--primary)"
         },
         "typography": {
           "fontSize": "38px",
@@ -204,7 +195,7 @@
       },
       "h2": {
         "color": {
-          "text": "var(--wp--preset--color--second)"
+          "text": "var(--wp--preset--color--secondary)"
         },
         "typography": {
           "fontSize": "38px",
