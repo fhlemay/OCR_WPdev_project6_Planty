@@ -1,6 +1,6 @@
 {
   "settings": {
-    "appearanceTools": true,
+    "appearanceTools": false,
     "color": {
       "defaultPalette": false,
       "palette": [
