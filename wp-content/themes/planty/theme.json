@@ -46,7 +46,7 @@
       "wideSize": "1440px"
     },
     "spacing": {
-      "blockGap": null,
+      "blockGap": true,
       "margin": true,
       "padding": true,
       "units": [
@@ -223,6 +223,13 @@
     },
     "typography": {
       "fontFamily": "var(--wp--preset--font-family--syne)"
+    },
+    "spacing": {
+      "blockGap": "0 px",
+      "margin": {
+        "top": "0px",
+        "bottom": "0px"
+      }
     }
   },
   "templateParts": [
