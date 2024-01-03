@@ -2,9 +2,9 @@
 
 /*
  * Plugin Name: Hide admin link
- * Description : Hide the link to the dashboard if the user is not loggued in.
- * Author : Frédéric Le May
- * Author URI : http://flemay.com 
+ * Description: Hide admin link if the user is not loggued in.
+ * Author: Frédéric Le May
+ * Author URI: http://flemay.com 
  */
 
 function hide_admin_link($inner_blocks)
@@ -21,9 +21,9 @@ function hide_admin_link($inner_blocks)
       //     echo var_dump($block_content) . '<br><br>';
       // }
 
-      $admin_url = $inner_block->parsed_block['attrs']['url'];
+      $url = $inner_block->parsed_block['attrs']['url'];
 
-      if ($admin_url == admin_url()) {
+      if(isset($url) && $url == admin_url()) {
         unset ($inner_blocks[$key]);
       }
     }
