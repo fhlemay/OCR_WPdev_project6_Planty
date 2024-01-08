@@ -246,16 +246,6 @@
 			"fontFamily": "var(--wp--preset--font-family--syne)"
 		}
 	},
-	"templateParts": [
-		{
-			"area": "header",
-			"name": "header"
-		},
-		{
-			"area": "footer",
-			"name": "footer"
-		}
-	],
 	"version": 2,
 	"$schema": "https://schemas.wp.org/wp/6.4/theme.json"
 }
