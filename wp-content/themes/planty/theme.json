@@ -105,10 +105,12 @@
 		"blocks": {
 			"core/button": {
 				"border": {
-					"radius": "5px"
+					"radius": "5px",
+          "style": "none"
 				},
 				"color": {
-					"background": "var(--wp--preset--color--ctatwo)"
+					"background": "var(--wp--preset--color--ctatwo)",
+          "text": "var(--wp--preset--color--white)"
 				},
 				"spacing": {
 					"padding": {
@@ -130,7 +132,8 @@
 					"button": {
 						":hover": {
 							"color": {
-								"background": "var(--wp--preset--color--ctahover)"
+								"background": "var(--wp--preset--color--ctahover)",
+                "text" : "var(--wp--preset--color--white)"
 							}
 						},
 						"border": {
@@ -142,8 +145,6 @@
 						"spacing": {
 							"padding": {
 								"bottom": "31px",
-								"left": "61px",
-								"right": "61px",
 								"top": "30px"
 							}
 						},
@@ -151,7 +152,9 @@
 							"fontSize": "16px",
 							"fontStyle": "normal",
 							"fontWeight": "600"
-						}
+						},
+            "css": "white-space: nowrap;"
+
 					},
 					"link": {
 						":hover": {
