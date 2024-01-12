@@ -11,6 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use KadenceWP\KadenceBlocks\App;
+use KadenceWP\KadenceBlocks\StellarWP\ContainerContract\ContainerInterface;
+
+use function KadenceWP\KadenceBlocks\StellarWP\Uplink\get_license_domain;
+use function KadenceWP\KadenceBlocks\StellarWP\Uplink\get_authorization_token;
+use function KadenceWP\KadenceBlocks\StellarWP\Uplink\is_authorized;
+
 /**
  * Enqueue block assets for backend editor.
  *
@@ -170,10 +177,6 @@ function kadence_blocks_gutenberg_editor_assets_variables() {
 	} elseif ( current_user_can( apply_filters( 'kadence_blocks_contributor_role', 'edit_posts' ) ) ) {
 		$userrole = 'contributor';
 	}
-	$pro_data = false;
-	if ( class_exists( 'Kadence_Blocks_Pro' ) ) {
-		$pro_data = kadence_blocks_get_pro_license_data();
-	}
 	$access_levels = false;
 	$level_ids = false;
 	if ( function_exists( 'rcp_get_access_levels' ) ) {
@@ -225,6 +228,18 @@ function kadence_blocks_gutenberg_editor_assets_variables() {
 		'xxl' => 'clamp(2.5rem, 1.456rem + 3.26vw, 4rem)',
 		'xxxl' => 'clamp(2.75rem, 0.489rem + 7.065vw, 6rem)',
 	);
+	$pro_data = kadence_blocks_get_current_license_data();
+	if ( ! empty( $pro_data['key'] ) ) {
+		$pro_data['api_key'] = $pro_data['key'];
+	}
+	if ( ! empty( $pro_data['email'] ) ) {
+		$pro_data['api_email'] = $pro_data['email'];
+	}
+	$token         = get_authorization_token( 'kadence-blocks' );
+	$is_authorized = false;
+	if ( $token && ! empty( $pro_data['key'] ) ) {
+		$is_authorized = is_authorized( $pro_data['key'], $token, get_license_domain() );
+	}
 	$font_sizes = apply_filters( 'kadence_blocks_variable_font_sizes', $font_sizes );
 	$subscribed = class_exists( 'Kadence_Blocks_Pro' ) ? true : get_option( 'kadence_blocks_wire_subscribe' );
 	$gfonts_path      = KADENCE_BLOCKS_PATH . 'includes/gfonts-array.php';
@@ -235,7 +250,7 @@ function kadence_blocks_gutenberg_editor_assets_variables() {
 	$current_user     = wp_get_current_user();
 	$user_email       = $current_user->user_email;
 	$recent_posts     = wp_get_recent_posts( array( 'numberposts' => '1' ) );
-	$product          = get_posts( array( 'numberposts' => 1, 'post_type' => 'product' ) );
+	$products          = get_posts( array( 'numberposts' => 4, 'post_type' => 'product', 'fields' => 'ids' ) );
 	wp_localize_script(
 		'kadence-blocks-js',
 		'kadence_blocks_params',
@@ -251,6 +266,8 @@ function kadence_blocks_gutenberg_editor_assets_variables() {
 			'settings'       => get_option( 'kadence_blocks_settings_blocks' ),
 			'userrole'       => $userrole,
 			'proData'        => $pro_data,
+			'isAuthorized'   => $is_authorized,
+			'homeLink'       => admin_url( 'admin.php?page=kadence-blocks-home' ),
 			'pro'            => ( class_exists( 'Kadence_Blocks_Pro' ) ? 'true' : 'false' ),
 			'colors'         => get_option( 'kadence_blocks_colors' ),
 			'global'         => get_option( 'kadence_blocks_global' ),
@@ -266,6 +283,7 @@ function kadence_blocks_gutenberg_editor_assets_variables() {
 			'termEndpoint'   => '/kbp/v1/term-select',
 			'taxonomiesEndpoint' => '/kbp/v1/taxonomies-select',
 			'postTypes'      => kadence_blocks_get_post_types(),
+			'postTypesQueryable' => kadence_blocks_get_post_types( array( 'publicly_queryable' => true ) ),
 			'taxonomies'     => array(),
 			'g_fonts'        => file_exists( $gfonts_path ) ? include $gfonts_path : array(),
 			'g_font_names'   => file_exists( $gfont_names_path ) ? include $gfont_names_path : array(),
@@ -295,7 +313,8 @@ function kadence_blocks_gutenberg_editor_assets_variables() {
 			'hasPosts' => ( ! empty( $recent_posts[0]['ID'] ) ? true : false ),
 			'addPostsLink' => admin_url( 'post-new.php' ),
 			'hasWoocommerce' => ( class_exists( 'woocommerce' ) ? true : false ),
-			'hasProducts' => ( class_exists( 'woocommerce' ) && ! empty( $product ) ? true : false ),
+			'hasProducts' => ( class_exists( 'woocommerce' ) && ! empty( $products ) ? true : false ),
+			'replaceProducts' => ( class_exists( 'woocommerce' ) && ! empty( $products ) ? $products : '' ),
 			'addProductsLink' => ( class_exists( 'woocommerce' ) ? admin_url( 'product-new.php' ) : 'https://wordpress.org/plugins/woocommerce/' ),
 			'hasKadenceCaptcha' => ( is_plugin_active( 'kadence-recaptcha/kadence-recaptcha.php' ) ? true : false ),
 			'adminUrl' => get_admin_url(),
@@ -354,11 +373,14 @@ function kadence_blocks_get_asset_file( $filepath ) {
  *
  * @return array
  */
-function kadence_blocks_get_post_types() {
+function kadence_blocks_get_post_types( $otherArgs = array() ) {
 	$args = array(
 		'public'       => true,
 		'show_in_rest' => true,
 	);
+	if( !empty( $otherArgs ) ) {
+		$args = array_merge( $args, $otherArgs );
+	}
 	$post_types = get_post_types( $args, 'objects' );
 	$output = array();
 	foreach ( $post_types as $post_type ) {
@@ -1045,51 +1067,17 @@ function kadence_blocks_register_api_endpoints() {
 	$mailerlite_controller->register_routes();
 	$fluentcrm_controller = new Kadence_FluentCRM_REST_Controller();
 	$fluentcrm_controller->register_routes();
-	$lottieanimation_conteoller_get = new Kadence_LottieAnimation_get_REST_Controller();
-	$lottieanimation_conteoller_get->register_routes();
-	$lottieanimation_conteoller_upload = new Kadence_LottieAnimation_post_REST_Controller();
-	$lottieanimation_conteoller_upload->register_routes();
+	$lottieanimation_controller_get = new Kadence_LottieAnimation_get_REST_Controller();
+	$lottieanimation_controller_get->register_routes();
+	$lottieanimation_controller_upload = new Kadence_LottieAnimation_post_REST_Controller();
+	$lottieanimation_controller_upload->register_routes();
 
-	$image_picker_conteoller_upload = new Kadence_Blocks_Image_Picker_REST_Controller();
-	$image_picker_conteoller_upload->register_routes();
+	$design_library_controller_upload = new Kadence_Blocks_Prebuilt_Library_REST_Controller();
+	$design_library_controller_upload->register_routes();
+	$image_picker_controller_upload = new Kadence_Blocks_Image_Picker_REST_Controller();
+	$image_picker_controller_upload->register_routes();
 }
 add_action( 'rest_api_init', 'kadence_blocks_register_api_endpoints' );
-
-/**
- * Get the license information.
- *
- * @return array
- */
-function kadence_blocks_get_pro_license_data() {
-	$data = false;
-	$current_theme = wp_get_theme();
-	$current_theme_name = $current_theme->get( 'Name' );
-	$current_theme_template = $current_theme->get( 'Template' );
-	// Check for a classic theme license.
-	if ( 'Pinnacle Premium' == $current_theme_name || 'pinnacle_premium' == $current_theme_template || 'Ascend - Premium' == $current_theme_name || 'ascend_premium' == $current_theme_template || 'Virtue - Premium' == $current_theme_name || 'virtue_premium' == $current_theme_template ) {
-		$pro_data = get_option( 'kt_api_manager' );
-		if ( $pro_data ) {
-			$data['ithemes']  = '';
-			$data['username'] = '';
-			if ( 'Pinnacle Premium' == $current_theme_name || 'pinnacle_premium' == $current_theme_template ) {
-				$data['product_id'] = 'pinnacle_premium';
-			} elseif ( 'Ascend - Premium' == $current_theme_name || 'ascend_premium' == $current_theme_template ) {
-				$data['product_id'] = 'ascend_premium';
-			} elseif ( 'Virtue - Premium' == $current_theme_name || 'virtue_premium' == $current_theme_template ) {
-				$data['product_id'] = 'virtue_premium';
-			}
-			$data['api_key'] = $pro_data['kt_api_key'];
-			$data['api_email'] = $pro_data['activation_email'];
-		}
-	} else {
-		if ( is_multisite() && ! apply_filters( 'kadence_activation_individual_multisites', true ) ) {
-			$data = get_site_option( 'kt_api_manager_kadence_gutenberg_pro_data' );
-		} else {
-			$data = get_option( 'kt_api_manager_kadence_gutenberg_pro_data' );
-		}
-	}
-	return $data;
-}
 
 /**
  * Register the lotte post type.
@@ -1138,3 +1126,17 @@ function kadence_blocks_skip_lazy_load( $value, $image, $context ) {
 	return $value;
 }
 add_filter( 'wp_img_tag_add_loading_attr', 'kadence_blocks_skip_lazy_load', 10, 3 );
+
+/**
+ * The Kadence Blocks Application Container.
+ *
+ * @see kadence_blocks_init()
+ *
+ * @note kadence_blocks_init() must be called before this one.
+ *
+ * @return ContainerInterface
+ * @throws InvalidArgumentException
+ */
+function kadence_blocks(): ContainerInterface {
+	return App::instance()->container();
+}

@@ -365,7 +365,7 @@ class Kadence_Blocks_Advanced_Form_Block extends Kadence_Blocks_Abstract_Block {
 		if ( isset( $field_style['isDark'] ) && $field_style['isDark'] ) {
 			$outer_classes[] = 'kb-form-is-dark';
 		}
-		if( !empty( $form_attributes['className'] ) ) {
+		if( ! empty( $form_attributes['className'] ) ) {
 			$outer_classes[] = $form_attributes['className'];
 		}
 		$background_type = ( ! empty( $background_style['backgroundType'] ) ? $background_style['backgroundType'] : 'normal' );
@@ -389,6 +389,9 @@ class Kadence_Blocks_Advanced_Form_Block extends Kadence_Blocks_Abstract_Block {
 			'class' => implode( ' ', $inner_classes ),
 			'method' => 'post',
 		);
+		if ( isset($form_attributes['messages']['preError']) && ! empty($form_attributes['messages']['preError'])) {
+			$inner_args['data-error-message'] = $form_attributes['messages']['preError'];
+		}
 		if ( isset( $form_attributes['browserValidation'] ) && ! $form_attributes['browserValidation'] ) {
 			$inner_args['novalidate'] = 'true';
 		}

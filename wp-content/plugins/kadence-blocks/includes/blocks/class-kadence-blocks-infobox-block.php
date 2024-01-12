@@ -75,7 +75,7 @@ class Kadence_Blocks_Infobox_Block extends Kadence_Blocks_Abstract_Block {
 		}
 
 		// Style.
-		if ( ! empty( $attributes['containerBackground'] ) || $css->is_number( $attributes['containerBackgroundOpacity'] ) || ! empty( $attributes['maxWidth'] ) ) {
+		if ( ! empty( $attributes['containerBackground'] ) || $css->is_number( $attributes['containerBackgroundOpacity'] ) || ! empty( $attributes['maxWidth'] ) || ! empty( $attributes['tabletMaxWidth'] ) || ! empty( $attributes['mobileMaxWidth'] ) ) {
 			if ( isset( $attributes['containerBackground'] ) && ! empty( $attributes['containerBackground'] ) ) {
 				$alpha = ( isset( $attributes['containerBackgroundOpacity'] ) && is_numeric( $attributes['containerBackgroundOpacity'] ) ? $attributes['containerBackgroundOpacity'] : 1 );
 				$css->add_property( 'background', $css->render_color( $attributes['containerBackground'], $alpha ) );
@@ -83,10 +83,19 @@ class Kadence_Blocks_Infobox_Block extends Kadence_Blocks_Abstract_Block {
 				$alpha = ( isset( $attributes['containerBackgroundOpacity'] ) && is_numeric( $attributes['containerBackgroundOpacity'] ) ? $attributes['containerBackgroundOpacity'] : 1 );
 				$css->add_property( 'background', $css->render_color( '#f2f2f2', $alpha ) );
 			}
-			if ( isset( $attributes['maxWidth'] ) && ! empty( $attributes['maxWidth'] ) ) {
-				$unit = ( isset( $attributes['maxWidthUnit'] ) && ! empty( $attributes['maxWidthUnit'] ) ? $attributes['maxWidthUnit'] : 'px' );
-				$css->add_property( 'max-width', $attributes['maxWidth'] . $unit );
+			$max_width_unit = ( isset( $attributes['maxWidthUnit'] ) && ! empty( $attributes['maxWidthUnit'] ) ? $attributes['maxWidthUnit'] : 'px' );
+			if ( ! empty( $attributes['maxWidth'] ) ) {
+				$css->add_property( 'max-width', $attributes['maxWidth'] . $max_width_unit );
 			}
+			if ( ! empty( $attributes['tabletMaxWidth'] ) ) {
+				$css->set_media_state( 'tablet' );
+				$css->add_property( 'max-width', $attributes['tabletMaxWidth'] . $max_width_unit );
+			}
+			if ( ! empty( $attributes['mobileMaxWidth'] ) ) {
+				$css->set_media_state( 'mobile' );
+				$css->add_property( 'max-width', $attributes['mobileMaxWidth'] . $max_width_unit );
+			}
+			$css->set_media_state( 'desktop' );
 		}
 		$css->render_measure_output( $attributes, 'containerPadding', 'padding', array( 'tablet_key' => 'containerTabletPadding', 'mobile_key' => 'containerMobilePadding' ) );
 		$css->render_measure_output( $attributes, 'containerMargin', 'margin', array( 'unit_key' => 'containerMarginUnit' ) );
@@ -337,7 +346,7 @@ class Kadence_Blocks_Infobox_Block extends Kadence_Blocks_Abstract_Block {
 		$titleTagType = !empty( $attributes['titleTagType'] ) ? $attributes['titleTagType'] : 'heading';
 		$titleTag = 'heading' === $titleTagType ? 'h' . ( !empty( $attributes['titleFont'][0]['level'] ) ? $attributes['titleFont'][0]['level'] : '2' ) : $titleTagType;
 		if ( isset( $attributes['titleColor'] ) || isset( $attributes['titleFont'] ) ) {
-			$css->set_selector( $base_selector . ' ' . $titleTag . '.kt-blocks-info-box-title' );
+			$css->set_selector( $base_selector . ' .kt-infobox-textcontent ' . $titleTag . '.kt-blocks-info-box-title' );
 			if ( isset( $attributes['titleColor'] ) && ! empty( $attributes['titleColor'] ) ) {
 				$css->add_property( 'color', $css->render_color( $attributes['titleColor'] ) );
 			}
@@ -511,7 +520,7 @@ class Kadence_Blocks_Infobox_Block extends Kadence_Blocks_Abstract_Block {
 			if ( isset( $attributes['textColor'] ) && ! empty( $attributes['textColor'] ) ) {
 				$css->add_property( 'color', $css->render_color( $attributes['textColor'] ) );
 			}
-			$css->set_selector( $base_selector . ' .kt-blocks-info-box-text' );
+			$css->set_selector('.wp-block-kadence-infobox' . $base_selector . ' .kt-blocks-info-box-text' );
 			if ( isset( $attributes['textFont'] ) && is_array( $attributes['textFont'] ) && is_array( $attributes['textFont'][0] ) ) {
 				$text_font = $attributes['textFont'][0];
 				if ( isset( $text_font['size'] ) && is_array( $text_font['size'] ) && ! empty( $text_font['size'][0] ) ) {

@@ -99,7 +99,7 @@ class KB_Ajax_Advanced_Form {
 				}
 			}
 
-			$processed_fields = $this->process_fields( $form_args['fields'] );
+			$processed_fields = apply_filters( 'kadence_blocks_advanced_form_processed_fields', $this->process_fields( $form_args['fields'] ) );
 
 			do_action( 'kadence_blocks_advanced_form_submission', $form_args, $processed_fields, $post_id );
 
@@ -161,7 +161,7 @@ class KB_Ajax_Advanced_Form {
 				$value = sanitize_email( trim( $value ) );
 				break;
 			case 'accept':
-				$value = !empty( $value) ? esc_html__( 'Accept', 'kadence-blocks' ) : esc_html__( 'Did not accept', 'kadence-blocks' ) ;
+				$value = !empty( $value ) ? esc_html__( 'Accept', 'kadence-blocks' ) : esc_html__( 'Did not accept', 'kadence-blocks' );
 				break;
 			default:
 				/**

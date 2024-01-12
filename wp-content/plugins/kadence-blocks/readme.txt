@@ -4,7 +4,7 @@ Tags: gutenberg, blocks, page builder, google fonts, dual buttons, svg icons, ed
 Donate link: https://www.kadencewp.com/about-us/
 Requires at least: 6.1
 Tested up to: 6.4
-Stable tag: 3.1.26
+Stable tag: 3.2.15
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -96,6 +96,94 @@ assist you with verification, CVE assignment, and notify the
 developers of this plugin.
 
 == Changelog ==
+
+= 3.2.15 =
+Release Date: January 11th, 2024
+* Update: Change how tablet css is handled.
+* Fix: Issue with galleries inside of flex sections.
+
+= 3.2.14 =
+Release Date: January 10th, 2024
+* Fix: Floating Layouts inside of section blocks.
+
+= 3.2.13 =
+Release Date: January 10th, 2024
+* Update: Change limits on typography font size field.
+* Update: Prevent changing unit for typography sizes in tablet, mobile.
+* Fix: Possible spacing issue in columns, flex layouts.
+* Fix: Default color in accordion example for better accessibility.
+* Fix: Possible issue with captions below images in gallery not centered
+
+= 3.2.12 =
+Release Date: January 9th, 2024
+* Update: Improve location context imports.
+* Fix: Remove adv form accept field default input
+* Fix: Issue with RTL Carousels.
+* Fix: Possible issue with event tickets.
+* Fix: Better caching with auth.
+
+= 3.2.11 Pre Release =
+Release Date: January 3rd, 2024
+* Fix: Possible layout issue with justify content in vertical layouts.
+* Fix: Max width issue with info box and mobile/tablet.
+* Fix: Issue with tab layout and last tab.
+* Fix: Issue with tab title margin
+
+= 3.2.10 Pre Release =
+Release Date: December 21st, 2023
+* Update: Advanced text icon title option.
+* Update: Icon list icon title option.
+* Update: Button icon title option.
+* Fix: Issue with icon list link color.
+
+= 3.2.9 Pre Release =
+Release Date: December 20th, 2023
+* Fix: Issue with some logo items in library
+* Fix: Issue with some content in design library.
+* Fix: Possible php notice with image import.
+* Fix: Issue with possible company description length.
+* Fix: Issue with php error in dynamic links for gallery.
+* Fix: Issue with Ipad Pro media queries.
+* Fix: Issue with images in flex layouts missing width.
+* Fix: Issue with icons and screen readers.
+
+= 3.2.8 Pre Release =
+Release Date: December 11th, 2023
+* Fix: Issue with typed text and & symbol.
+* Fix: Issue with tab units
+* Add: Repeatable Countdown
+* Fix: Time zone issue with countdown.
+* Fix: Network activated UI.
+* Fix: Logo color logic in design library.
+* Fix: Issue with design library file not being updated.
+
+= 3.2.7 Pre Release =
+Release Date: December 5th, 2023
+* Fix: Issue with undefined function.
+* Fix: possible issue with ACF and Pexels library.
+
+= 3.2.6 Pre Release =
+Release Date: December 5th, 2023
+* Fix: Issue with new posts and token manager.
+
+= 3.2.5 Pre Release =
+Release Date: December 4th, 2023
+* Add: AI options in design library.
+* Add: Inline AI for Text (adv) block.
+* Add: New Image placeholder options for design library.
+* Add: New caching system for design library and pexels.
+* Add: New optimized image downloader.
+* Add: New home page and activation for AI.
+* Fix: Possible tablet css issue with sections.
+* Fix: Advanced form missing pre submit custom error.
+* Fix: Issue with info box text content styling.
+* Fix: Issue with modal in editor.
+* Fix: Form data sometimes not clearing after submit.
+
+= 3.2.0 Beta Version 1 =
+Release Date: October 5th, 2023
+* Add: New Flex control options in section block.
+* Add: New auto option for margin controls.
 
 = 3.1.26 =
 Release Date: November 15th, 2023
